@@ -1,0 +1,57 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h1>Página Inicial</h1>
+    <a href="{{ url_for('cadastrar_cliente_view') }}">Cadastrar Cliente</a>
+    <a href="{{ url_for('listar_clientes') }}">Ver clientes</a>
+
+    <h2>Lista de Clientes</h2>
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Nome</th>
+            <th>sobrenome</th>
+            <th>email</th>
+            <th>telefone</th>
+            <th>cpf</th>
+            <th>data nascimento</th>
+            <th>ações</th>
+
+        </tr>
+        {% for cliente in clientes %}
+        <tr>
+            <td>{{ cliente.id }}</td>
+            <td>{{ cliente.nome }}</td>
+            <td>{{ cliente.sobrenome }}</td>
+            <td>{{ cliente.email }}</td>
+            <td>{{ cliente.telefone }}</td>
+            <td>{{ cliente.cpf }}</td>
+            <td>{{ cliente.data_nascimento }}</td>
+            <td>
+                <a href="{{ url_for('editar_cliente', id=cliente.id) }}"><button>Editar</button></a>
+                <a href=""><button>Excluir</button></a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>

@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template, redirect, url_for
+from flask import Flask, request, render_template, redirect, url_for,flash
 from app.models.cliente import Cliente
 from app.controllers.cliente_controller import ClienteController
 from flask_sqlalchemy import SQLAlchemy
@@ -28,6 +28,44 @@ def cadastrar_cliente_view():
     else:
         return cliente_controller.renderizar_formulario()
 
+@app.route('/listar_clientes', methods=['GET'])
+def listar_clientes():
+    clientes = cliente_controller.listar_cliente(db)
+    return render_template('cliente_lista.html', clientes=clientes)
+
+@app.route('/editar_cliente/<int:id>', methods=['GET', 'POST'])
+def editar_cliente(id):
+    cliente = cliente_controller.obter_cliente_por_id(id=id,db=db)
+    if request.method == 'POST':
+        if cliente:
+            id = cliente.id
+            nome = request.form.get('nome')
+            sobrenome = request.form.get('sobrenome')
+            email = request.form.get('email')
+            telefone = request.form.get('telefone')
+            data_nascimento = request.form.get('data_nascimento')
+            cpf = request.form.get('cpf')
+            cliente = Cliente(nome=nome, telefone=telefone,sobrenome=sobrenome,data_nascimento=data_nascimento)
+            cliente.set_email(email=email)
+            cliente.set_cpf(cpf_cliente=cpf)
+            cliente_controller.editar_cliente(db=db,cliente=cliente,id=id)
+            return redirect(url_for('listar_clientes'))
+        else:
+            return "Cliente não encontrado", 404
+    else:
+        if cliente:
+            return render_template('cliente_edicao.html', cliente=cliente)
+        else:
+            return "Cliente não encontrado", 404
+
+@app.route('/excluir_cliente/<int:id>')
+def excluir_cliente():
+    clientes = cliente_controller.listar_cliente(db)
+    return render_template('cliente_lista.html', clientes=clientes)
+
+@app.route('/home')
+def home():
+    return render_template('home.html')
 
 if __name__ == '__main__':
     app.run(debug=True)

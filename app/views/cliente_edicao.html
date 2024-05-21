@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Editar Cliente</title>
+</head>
+<body>
+    <h1>Editar Cliente</h1>
+    <form action="{{ url_for('editar_cliente', id=cliente.id) }}" method="POST">
+        Nome: <input type="text" name="nome" value="{{ cliente.nome }}"><br>
+        Sobrenome: <input type="text" name="sobrenome" value="{{ cliente.sobrenome }}"><br>
+        Email: <input type="text" name="email" value="{{ cliente.email }}"><br>
+        Telefone: <input type="text" name="telefone" value="{{ cliente.telefone }}"><br>
+        Cpf: <input type="text" name="cpf" value="{{ cliente.cpf }}"><br>
+        Data Nascimento: <input type="date" name="data_nascimento" value="{{ cliente.data_nascimento }}"><br>
+        <input type="submit" value="Atualizar">
+    </form>
+</body>
+</html>
