@@ -1,0 +1,9 @@
+CREATE TABLE clientes (
+    id SERIAL PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL,
+    sobrenome VARCHAR(100) NOT NULL,
+    cpf VARCHAR(100) UNIQUE,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    telefone VARCHAR(100),
+    data_nascimento DATE
+);

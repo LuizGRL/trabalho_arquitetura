@@ -1,57 +1,119 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Home</title>
+    <title>Lista de Clientes</title>
     <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 80%;
+            max-width: 1000px;
+            text-align: center;
+        }
+        h2 {
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
         table {
             width: 100%;
             border-collapse: collapse;
+            margin-top: 20px;
         }
         th, td {
-            border: 1px solid black;
-            padding: 8px;
+            border: 1px solid #ddd;
+            padding: 12px;
             text-align: left;
         }
         th {
             background-color: #f2f2f2;
+            color: black;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+        button {
+            padding: 8px 12px;
+            margin: 4px 2px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .edit-button {
+            background-color: #007bff;
+            color: white;
+        }
+        .edit-button:hover {
+            background-color: #0056b3;
+        }
+        .delete-button {
+            background-color: #dc3545;
+            color: white;
+        }
+        .delete-button:hover {
+            background-color: #c82333;
+        }
+        .home-button {
+            background-color: #007bff;
+            color: white;
+            margin-top: 20px;
+            text-decoration: none;
+            padding: 10px 20px;
+            display: inline-block;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+        .home-button:hover {
+            background-color: #0056b3;
         }
     </style>
 </head>
 <body>
-    <h1>Página Inicial</h1>
-    <a href="{{ url_for('cadastrar_cliente_view') }}">Cadastrar Cliente</a>
-    <a href="{{ url_for('listar_clientes') }}">Ver clientes</a>
-
-    <h2>Lista de Clientes</h2>
-    <table>
-        <tr>
-            <th>ID</th>
-            <th>Nome</th>
-            <th>sobrenome</th>
-            <th>email</th>
-            <th>telefone</th>
-            <th>cpf</th>
-            <th>data nascimento</th>
-            <th>ações</th>
-
-        </tr>
-        {% for cliente in clientes %}
-        <tr>
-            <td>{{ cliente.id }}</td>
-            <td>{{ cliente.nome }}</td>
-            <td>{{ cliente.sobrenome }}</td>
-            <td>{{ cliente.email }}</td>
-            <td>{{ cliente.telefone }}</td>
-            <td>{{ cliente.cpf }}</td>
-            <td>{{ cliente.data_nascimento }}</td>
-            <td>
-                <a href="{{ url_for('editar_cliente', id=cliente.id) }}"><button>Editar</button></a>
-                <a href=""><button>Excluir</button></a>
-            </td>
-        </tr>
-        {% endfor %}
-    </table>
+    <div class="container">
+        <h2>Lista de Clientes</h2>
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>Nome</th>
+                <th>Sobrenome</th>
+                <th>Email</th>
+                <th>Telefone</th>
+                <th>CPF</th>
+                <th>Data Nascimento</th>
+                <th>Ações</th>
+            </tr>
+            {% for cliente in clientes %}
+            <tr>
+                <td>{{ cliente.id }}</td>
+                <td>{{ cliente.nome }}</td>
+                <td>{{ cliente.sobrenome }}</td>
+                <td>{{ cliente.email }}</td>
+                <td>{{ cliente.telefone }}</td>
+                <td>{{ cliente.cpf }}</td>
+                <td>{{ cliente.data_nascimento }}</td>
+                <td>
+                    <a href="{{ url_for('editar_cliente', id=cliente.id) }}"><button class="edit-button">Editar</button></a>
+                    <a href="{{ url_for('excluir_cliente', id=cliente.id) }}"><button class="delete-button">Excluir</button></a>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+        <a href="{{ url_for('home') }}" class="home-button">Voltar à Home</a>
+    </div>
 </body>
 </html>

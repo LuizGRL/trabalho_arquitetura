@@ -3,17 +3,77 @@
 <head>
     <meta charset="UTF-8">
     <title>Cadastro de Cliente</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            text-align: center;
+        }
+        .home-button {
+            background-color: #007bff;
+            color: white;
+            margin-top: 20px;
+            text-decoration: none;
+            padding: 10px 20px;
+            display: inline-block;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+        h1 {
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        input[type="text"],
+        input[type="date"] {
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        input[type="submit"] {
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+    </style>
 </head>
 <body>
-    <h1>Cadastro de Cliente</h1>
-    <form action="/cadastrar_cliente" method="POST">
-        Nome: <input type="text" name="nome"><br>
-        Sobrenome: <input type="text" name="sobrenome"><br>
-        Email: <input type="text" name="email"><br>
-        Telefone: <input type="text" name="telefone"><br>
-        Cpf: <input type="text" name="cpf"><br>
-        Data Nascimento: <input type="date" name="data_nascimento"><br>
-        <input type="submit" value="Cadastrar">
-    </form>
+    <div class="container">
+        <h1>Cadastro de Cliente</h1>
+        <form action="/cadastrar_cliente" method="POST">
+            <input type="text" name="nome" placeholder="Nome" required><br>
+            <input type="text" name="sobrenome" placeholder="Sobrenome" required><br>
+            <input type="text" name="email" placeholder="Email" required><br>
+            <input type="text" name="telefone" placeholder="Telefone"><br>
+            <input type="text" name="cpf" placeholder="Cpf" required><br>
+            <input type="date" name="data_nascimento" placeholder="Data de Nascimento" required><br>
+            <input type="submit" value="Cadastrar">
+            <a href="{{ url_for('home') }}" class="home-button">Voltar à Home</a>
+
+        </form>
+    </div>
 </body>
 </html>

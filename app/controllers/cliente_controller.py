@@ -24,10 +24,11 @@ class ClienteController:
             cliente_banco = ClienteBanco(nome=nome, sobrenome=sobrenome,email=email,telefone=telefone,data_nascimento=data_nascimento,cpf=cpf)
             db.session.add(cliente_banco)
             db.session.commit()
-            return str(f"Cliente cadastrado com sucesso id: {cliente_banco.id}")
+            return {"status": "success", "message": "CLiente cadastradro com sucesso" }
         except Exception as e:
             db.session.rollback()
-            return str(f"Erro ao cadastrar o cliente: {str(e)}")
+            return {"status": "error", "message": str(f"Erro ao cadastrar o cliente: {str(e)}")}
+
         
         
     def listar_cliente(self,db):
@@ -82,7 +83,6 @@ class ClienteController:
                 cliente_banco.telefone = cliente.telefone
                 cliente_banco.data_nascimento = cliente.data_nascimento
                 cliente_banco.cpf = cliente.cpf_cliente
-
                 db.session.commit()
                 return str(f"Cliente atualizado com sucesso id: {cliente_banco.id}")
             else:
@@ -90,6 +90,33 @@ class ClienteController:
         except Exception as e:
             db.session.rollback()
             return str(f"Erro ao atualizar o cliente: {str(e)}")
+        
+    def excluir_cliente(self, id, db):
+        if 'ClienteBanco' not in globals():
+            class ClienteBanco(db.Model):
+                __tablename__ = 'clientes'
+                __table_args__ = {'extend_existing': True}
+                id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+                nome = db.Column(db.String(100), nullable=False)
+                sobrenome = db.Column(db.String(100), nullable=False)
+                cpf = db.Column(db.String(100), unique=True)
+                email = db.Column(db.String(100), unique=True, nullable=False)
+                telefone = db.Column(db.String(100))
+                data_nascimento = db.Column(db.Date)
+
+            try:
+                cliente = db.session.query(ClienteBanco).filter_by(id=id).first()
+
+                if cliente:
+                    db.session.delete(cliente)
+                    db.session.commit()
+                    clientes = db.session.query(ClienteBanco).all()
+                    return {"status": "success", "clientes": clientes}
+                else:
+                    return {"status": "not_found", "message": f"Cliente com id {id} não encontrado"}
+            except Exception as e:
+                db.session.rollback()
+                return {"status": "error", "message": str(f"Erro ao excluir o cliente: {str(e)}")}
         
     def renderizar_formulario(self):
         return render_template("cliente_form.html")

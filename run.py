@@ -22,9 +22,13 @@ def cadastrar_cliente_view():
         cliente.set_email(email=email)
         cliente.set_cpf(cpf_cliente=cpf)
         if cliente.email is None or cliente.cpf_cliente is None:
-            return redirect(url_for('cadastrar_cliente_view', erro="Email inválido! Por favor, forneça um email válido."))
+            return render_template('error.html', message="Email ou cpf nulo")
         resultado = cliente_controller.cadastrar(cliente=cliente,db=db)
-        return resultado
+        if "sucesso" in resultado['message']:
+            return render_template('home.html')
+        else:
+            return render_template('error.html', message=resultado["message"])
+
     else:
         return cliente_controller.renderizar_formulario()
 
@@ -48,20 +52,30 @@ def editar_cliente(id):
             cliente = Cliente(nome=nome, telefone=telefone,sobrenome=sobrenome,data_nascimento=data_nascimento)
             cliente.set_email(email=email)
             cliente.set_cpf(cpf_cliente=cpf)
+            if cliente.email is None or cliente.cpf_cliente is None:
+                return "email ou cpf em padrão incorreto", 404
             cliente_controller.editar_cliente(db=db,cliente=cliente,id=id)
             return redirect(url_for('listar_clientes'))
         else:
-            return "Cliente não encontrado", 404
+            return render_template('error.html', message="cliente não econtrado")
+
     else:
         if cliente:
             return render_template('cliente_edicao.html', cliente=cliente)
         else:
-            return "Cliente não encontrado", 404
+            return render_template('error.html', message="cliente não econtrado")
 
 @app.route('/excluir_cliente/<int:id>')
-def excluir_cliente():
-    clientes = cliente_controller.listar_cliente(db)
-    return render_template('cliente_lista.html', clientes=clientes)
+def excluir_cliente(id):
+    resultado = cliente_controller.excluir_cliente(id=id, db=db)
+    
+    if resultado["status"] == "not_found":
+        return render_template('error.html', message=resultado["message"])
+    elif resultado["status"] == "success":
+        return render_template('cliente_lista.html', clientes=resultado["clientes"])
+    else:
+        return render_template('error.html', message=resultado["message"])
+
 
 @app.route('/home')
 def home():
